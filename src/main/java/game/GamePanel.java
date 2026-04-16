@@ -22,32 +22,32 @@ public class GamePanel extends JPanel {
     }
 
     private void setupKeyBindings() {
-        javax.swing.InputMap im = getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
-        javax.swing.ActionMap am = getActionMap();
+        javax.swing.InputMap inputMap = getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+        javax.swing.ActionMap actionMap = getActionMap();
 
         // Arrow keys
-        addBinding(im, am, KeyEvent.VK_UP,     0, "up",      () -> controller.move(-1,  0));
-        addBinding(im, am, KeyEvent.VK_DOWN,   0, "down",    () -> controller.move( 1,  0));
-        addBinding(im, am, KeyEvent.VK_LEFT,   0, "left",    () -> controller.move( 0, -1));
-        addBinding(im, am, KeyEvent.VK_RIGHT,  0, "right",   () -> controller.move( 0,  1));
+        addBinding(inputMap, actionMap, KeyEvent.VK_UP,     0, "up",      () -> controller.move(-1,  0));
+        addBinding(inputMap, actionMap, KeyEvent.VK_DOWN,   0, "down",    () -> controller.move( 1,  0));
+        addBinding(inputMap, actionMap, KeyEvent.VK_LEFT,   0, "left",    () -> controller.move( 0, -1));
+        addBinding(inputMap, actionMap, KeyEvent.VK_RIGHT,  0, "right",   () -> controller.move( 0,  1));
 
         // WASD keys
-        addBinding(im, am, KeyEvent.VK_W,      0, "w",       () -> controller.move(-1,  0));
-        addBinding(im, am, KeyEvent.VK_S,      0, "s",       () -> controller.move( 1,  0));
-        addBinding(im, am, KeyEvent.VK_A,      0, "a",       () -> controller.move( 0, -1));
-        addBinding(im, am, KeyEvent.VK_D,      0, "d",       () -> controller.move( 0,  1));
+        addBinding(inputMap, actionMap, KeyEvent.VK_W,      0, "w",       () -> controller.move(-1,  0));
+        addBinding(inputMap, actionMap, KeyEvent.VK_S,      0, "s",       () -> controller.move( 1,  0));
+        addBinding(inputMap, actionMap, KeyEvent.VK_A,      0, "a",       () -> controller.move( 0, -1));
+        addBinding(inputMap, actionMap, KeyEvent.VK_D,      0, "d",       () -> controller.move( 0,  1));
 
         // Other controls
-        addBinding(im, am, KeyEvent.VK_R,      0, "restart", () -> controller.restartLevel());
-        addBinding(im, am, KeyEvent.VK_N,      0, "next",    () -> { controller.nextLevel();     updateWindowTitle(); });
-        addBinding(im, am, KeyEvent.VK_P,      0, "prev",    () -> { controller.previousLevel(); updateWindowTitle(); });
-        addBinding(im, am, KeyEvent.VK_ESCAPE, 0, "quit",    () -> System.exit(0));
+        addBinding(inputMap, actionMap, KeyEvent.VK_R,      0, "restart", () -> controller.restartLevel());
+        addBinding(inputMap, actionMap, KeyEvent.VK_N,      0, "next",    () -> { controller.nextLevel();     updateWindowTitle(); });
+        addBinding(inputMap, actionMap, KeyEvent.VK_P,      0, "prev",    () -> { controller.previousLevel(); updateWindowTitle(); });
+        addBinding(inputMap, actionMap, KeyEvent.VK_ESCAPE, 0, "quit",    () -> System.exit(0));
     }
 
-    private void addBinding(javax.swing.InputMap im, javax.swing.ActionMap am,
+    private void addBinding(javax.swing.InputMap inputMap, javax.swing.ActionMap actionMap,
                             int key, int modifiers, String name, Runnable action) {
-        im.put(KeyStroke.getKeyStroke(key, modifiers), name);
-        am.put(name, new AbstractAction() {
+        inputMap.put(KeyStroke.getKeyStroke(key, modifiers), name);
+        actionMap.put(name, new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 action.run();
