@@ -6,6 +6,10 @@ plugins {
 group = 'game'
 version = '1.0'
 
+repositories {
+    mavenCentral()
+}
+
 application {
     mainClass = 'game.Main'
 }
