@@ -96,13 +96,20 @@ java -jar build/libs/sokoban-1.0.jar
 
 ## Levels
 
-| Level | Name          | Theme  | Boxes |
-|-------|---------------|--------|-------|
-| 1     | Tutorial      | Beige  | 1     |
-| 2     | Two Boxes     | Brown  | 2     |
-| 3     | Three Boxes   | Gray   | 3     |
-| 4     | Four Boxes    | Black  | 4     |
-| 5     | Five Boxes    | Yellow | 5     |
+| Level | Name          | Theme  | Boxes | Goals | Min. Steps | Notes                        |
+|-------|---------------|--------|-------|-------|------------|------------------------------|
+| 1     | Tutorial      | Beige  | 1     | 1     | ~8         | L-shaped introductory room   |
+| 2     | Two Boxes     | Brown  | 2     | 2     | ~16        | Enclosed 7×7 room            |
+| 3     | Three Boxes   | Gray   | 3     | 3     | ~18        | Enclosed 8×8 diagonal layout |
+| 4     | Four Boxes    | Black  | 4     | 4     | ~25        | Enclosed 9×10 two-tier room  |
+| 5     | Five Boxes    | Yellow | 5     | 5     | ~39        | Enclosed 9×11 full challenge |
+
+### Level solutions (spoilers)
+
+**Level 2** — navigate above box(2,2) and push it *down* to goal(3,2); then navigate below box(4,4) and push it *up* to goal(3,4). The three down-moves in the solution (DDD) are player navigation only.  
+**Level 3** — push each diagonal box straight down its column to the three adjacent goals in row 5.  
+**Level 4** — push the two lower boxes down one step first, then navigate up and push each upper box down two steps.  
+**Level 5** — push the two bottom boxes down one step first, then push each of the three upper boxes straight down three steps.
 
 ## Objective
 
