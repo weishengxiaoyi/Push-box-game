@@ -87,7 +87,7 @@ public class Board {
                 char ch = c < line.length() ? line.charAt(c) : ' ';
                 switch (ch) {
                     case '#': grid[r][c] = WALL; break;
-                    case ' ': grid[r][c] = EMPTY; break;
+                    case ' ': grid[r][c] = FLOOR; break;
                     case '.': grid[r][c] = GOAL; break;
                     case '$': grid[r][c] = CRATE; break;
                     case '@': grid[r][c] = PLAYER; playerRow = r; playerCol = c; break;
