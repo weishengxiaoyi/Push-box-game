@@ -100,7 +100,7 @@ public class GamePanel extends JPanel {
         g.fillRect(0, panelH - 24, getWidth(), 24);
         g.setColor(Color.LIGHT_GRAY);
         g.setFont(new Font("Arial", Font.PLAIN, 12));
-        g.drawString("Arrows: Move  R: Restart  N: Next  P: Prev  ESC: Quit", 6, panelH - 8);
+        g.drawString("Arrows/WASD: Move  R: Restart  N: Next  P: Prev  ESC: Quit", 6, panelH - 8);
     }
 
     private void drawTile(Graphics g, int cell, Theme theme, int x, int y) {
