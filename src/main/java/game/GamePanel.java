@@ -1,10 +1,13 @@
 package game;
 
 import java.awt.*;
-import java.awt.event.KeyAdapter;
+import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
+import javax.swing.AbstractAction;
+import javax.swing.JComponent;
 import javax.swing.JPanel;
+import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 
 public class GamePanel extends JPanel {
@@ -15,26 +18,42 @@ public class GamePanel extends JPanel {
         controller = new GameController();
         setBackground(Color.BLACK);
         setFocusable(true);
-        addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyPressed(KeyEvent e) {
-                handleKey(e.getKeyCode());
-            }
-        });
+        setupKeyBindings();
     }
 
-    private void handleKey(int keyCode) {
-        switch (keyCode) {
-            case KeyEvent.VK_UP:    controller.move(-1,  0); break;
-            case KeyEvent.VK_DOWN:  controller.move( 1,  0); break;
-            case KeyEvent.VK_LEFT:  controller.move( 0, -1); break;
-            case KeyEvent.VK_RIGHT: controller.move( 0,  1); break;
-            case KeyEvent.VK_R:     controller.restartLevel(); break;
-            case KeyEvent.VK_N:     controller.nextLevel(); updateWindowTitle(); break;
-            case KeyEvent.VK_P:     controller.previousLevel(); updateWindowTitle(); break;
-            case KeyEvent.VK_ESCAPE: System.exit(0); break;
-        }
-        repaint();
+    private void setupKeyBindings() {
+        javax.swing.InputMap inputMap = getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+        javax.swing.ActionMap actionMap = getActionMap();
+
+        // Arrow keys
+        addBinding(inputMap, actionMap, KeyEvent.VK_UP,     0, "up",      () -> controller.move(-1,  0));
+        addBinding(inputMap, actionMap, KeyEvent.VK_DOWN,   0, "down",    () -> controller.move( 1,  0));
+        addBinding(inputMap, actionMap, KeyEvent.VK_LEFT,   0, "left",    () -> controller.move( 0, -1));
+        addBinding(inputMap, actionMap, KeyEvent.VK_RIGHT,  0, "right",   () -> controller.move( 0,  1));
+
+        // WASD keys
+        addBinding(inputMap, actionMap, KeyEvent.VK_W,      0, "w",       () -> controller.move(-1,  0));
+        addBinding(inputMap, actionMap, KeyEvent.VK_S,      0, "s",       () -> controller.move( 1,  0));
+        addBinding(inputMap, actionMap, KeyEvent.VK_A,      0, "a",       () -> controller.move( 0, -1));
+        addBinding(inputMap, actionMap, KeyEvent.VK_D,      0, "d",       () -> controller.move( 0,  1));
+
+        // Other controls
+        addBinding(inputMap, actionMap, KeyEvent.VK_R,      0, "restart", () -> controller.restartLevel());
+        addBinding(inputMap, actionMap, KeyEvent.VK_N,      0, "next",    () -> { controller.nextLevel();     updateWindowTitle(); });
+        addBinding(inputMap, actionMap, KeyEvent.VK_P,      0, "prev",    () -> { controller.previousLevel(); updateWindowTitle(); });
+        addBinding(inputMap, actionMap, KeyEvent.VK_ESCAPE, 0, "quit",    () -> System.exit(0));
+    }
+
+    private void addBinding(javax.swing.InputMap inputMap, javax.swing.ActionMap actionMap,
+                            int key, int modifiers, String name, Runnable action) {
+        inputMap.put(KeyStroke.getKeyStroke(key, modifiers), name);
+        actionMap.put(name, new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                action.run();
+                repaint();
+            }
+        });
     }
 
     private void updateWindowTitle() {
@@ -81,7 +100,7 @@ public class GamePanel extends JPanel {
         g.fillRect(0, panelH - 24, getWidth(), 24);
         g.setColor(Color.LIGHT_GRAY);
         g.setFont(new Font("Arial", Font.PLAIN, 12));
-        g.drawString("Arrows: Move  R: Restart  N: Next  P: Prev  ESC: Quit", 6, panelH - 8);
+        g.drawString("Arrows/WASD: Move  R: Restart  N: Next  P: Prev  ESC: Quit", 6, panelH - 8);
     }
 
     private void drawTile(Graphics g, int cell, Theme theme, int x, int y) {

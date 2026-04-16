@@ -86,13 +86,13 @@ java -jar build/libs/sokoban-1.0.jar
 
 ## Controls
 
-| Key        | Action                |
-|------------|-----------------------|
-| Arrow Keys | Move player           |
-| R          | Restart current level |
-| N          | Next level            |
-| P          | Previous level        |
-| ESC        | Quit                  |
+| Key                  | Action                |
+|----------------------|-----------------------|
+| Arrow Keys / W A S D | Move player           |
+| R                    | Restart current level |
+| N                    | Next level            |
+| P                    | Previous level        |
+| ESC                  | Quit                  |
 
 ## Levels
 
