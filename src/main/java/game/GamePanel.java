@@ -6,12 +6,20 @@ import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import javax.swing.AbstractAction;
 import javax.swing.JComponent;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 
 public class GamePanel extends JPanel {
-    private static final int TILE_SIZE = 64;
+    private static final int TILE_SIZE  = 64;
+    /** Extra pixels at the top reserved for the level-name / difficulty HUD. */
+    private static final int HUD_TOP    = 50;
+    /** Extra pixels at the bottom reserved for the controls-hint bar. */
+    private static final int HUD_BOTTOM = 28;
+    /** Minimum panel width so the HUD text is never clipped. */
+    private static final int MIN_WIDTH  = 520;
+
     private final GameController controller;
 
     public GamePanel() {
@@ -39,8 +47,8 @@ public class GamePanel extends JPanel {
 
         // Other controls
         addBinding(inputMap, actionMap, KeyEvent.VK_R,      0, "restart", () -> controller.restartLevel());
-        addBinding(inputMap, actionMap, KeyEvent.VK_N,      0, "next",    () -> { controller.nextLevel();     updateWindowTitle(); });
-        addBinding(inputMap, actionMap, KeyEvent.VK_P,      0, "prev",    () -> { controller.previousLevel(); updateWindowTitle(); });
+        addBinding(inputMap, actionMap, KeyEvent.VK_N,      0, "next",    () -> { controller.nextLevel();     updateWindow(); });
+        addBinding(inputMap, actionMap, KeyEvent.VK_P,      0, "prev",    () -> { controller.previousLevel(); updateWindow(); });
         addBinding(inputMap, actionMap, KeyEvent.VK_ESCAPE, 0, "quit",    () -> System.exit(0));
     }
 
@@ -56,10 +64,22 @@ public class GamePanel extends JPanel {
         });
     }
 
-    private void updateWindowTitle() {
+    /** Builds the window title string for the current level. */
+    public String getWindowTitle() {
+        Level level = controller.getCurrentLevel();
+        String difficulty = ComplexityCalculator.getDifficultyLabel(level.complexityScore);
+        return "Sokoban - Level " + (controller.getCurrentLevelIndex() + 1) + " [" + difficulty + "]";
+    }
+
+    /** Updates the parent window title and resizes it to fit the new level. */
+    private void updateWindow() {
         Window window = SwingUtilities.getWindowAncestor(this);
         if (window instanceof Frame) {
-            ((Frame) window).setTitle("Sokoban - Level " + (controller.getCurrentLevelIndex() + 1));
+            ((Frame) window).setTitle(getWindowTitle());
+        }
+        if (window instanceof JFrame) {
+            ((JFrame) window).pack();
+            window.setLocationRelativeTo(null);
         }
     }
 
@@ -71,36 +91,62 @@ public class GamePanel extends JPanel {
         int rows = board.getRows();
         int cols = board.getCols();
 
+        // Tile area starts below the top HUD
         for (int r = 0; r < rows; r++) {
             for (int c = 0; c < cols; c++) {
                 int x = c * TILE_SIZE;
-                int y = r * TILE_SIZE;
+                int y = HUD_TOP + r * TILE_SIZE;
                 int cell = board.getCell(r, c);
                 drawTile(g, cell, theme, x, y);
             }
         }
 
-        // HUD
-        g.setColor(new Color(0, 0, 0, 150));
-        g.fillRect(0, 0, 220, 30);
+        // ── Top HUD bar (full width) ───────────────────────────────────────
+        g.setColor(new Color(0, 0, 0, 180));
+        g.fillRect(0, 0, getWidth(), HUD_TOP);
+
+        Level level = controller.getCurrentLevel();
+        String difficulty = ComplexityCalculator.getDifficultyLabel(level.complexityScore);
+
+        // Line 1: level number / name
         g.setColor(Color.WHITE);
         g.setFont(new Font("Arial", Font.BOLD, 16));
-        g.drawString("Level " + (controller.getCurrentLevelIndex() + 1) + "/" +
-                     controller.getTotalLevels() + " - " + controller.getCurrentLevel().name, 6, 20);
+        g.drawString(
+            "Level " + (controller.getCurrentLevelIndex() + 1) + "/" +
+            controller.getTotalLevels() + "  " + level.name,
+            8, 20);
 
+        // Line 2: difficulty label and numeric score
+        g.setColor(difficultyColor(difficulty));
+        g.setFont(new Font("Arial", Font.PLAIN, 13));
+        g.drawString(
+            "Difficulty: " + difficulty + "  (complexity score: " + level.complexityScore + ")",
+            8, 40);
+
+        // ── Win messages ──────────────────────────────────────────────────
         if (controller.isAllLevelsComplete()) {
             drawCenteredMessage(g, "You Won! All levels completed!", new Color(255, 215, 0));
         } else if (controller.isLevelComplete()) {
             drawCenteredMessage(g, "Level Complete! Press N for next level", Color.GREEN);
         }
 
-        // Controls hint
-        int panelH = rows * TILE_SIZE;
-        g.setColor(new Color(0, 0, 0, 150));
-        g.fillRect(0, panelH - 24, getWidth(), 24);
+        // ── Bottom controls-hint bar ──────────────────────────────────────
+        int boardBottom = HUD_TOP + rows * TILE_SIZE;
+        g.setColor(new Color(0, 0, 0, 180));
+        g.fillRect(0, boardBottom, getWidth(), HUD_BOTTOM);
         g.setColor(Color.LIGHT_GRAY);
         g.setFont(new Font("Arial", Font.PLAIN, 12));
-        g.drawString("Arrows/WASD: Move  R: Restart  N: Next  P: Prev  ESC: Quit", 6, panelH - 8);
+        g.drawString("Arrows/WASD: Move  R: Restart  N: Next  P: Prev  ESC: Quit", 6, boardBottom + 18);
+    }
+
+    /** Returns a color appropriate for each difficulty label. */
+    private Color difficultyColor(String difficulty) {
+        switch (difficulty) {
+            case "Easy":   return new Color(100, 220, 100);
+            case "Medium": return new Color(255, 200,  50);
+            case "Hard":   return new Color(255, 130,  40);
+            default:       return new Color(220,  60,  60); // Expert
+        }
     }
 
     private void drawTile(Graphics g, int cell, Theme theme, int x, int y) {
@@ -156,14 +202,14 @@ public class GamePanel extends JPanel {
     }
 
     private void drawCenteredMessage(Graphics g, String msg, Color color) {
-        int panelW = controller.getBoard().getCols() * TILE_SIZE;
-        int panelH = controller.getBoard().getRows() * TILE_SIZE;
+        int panelW = Math.max(controller.getBoard().getCols() * TILE_SIZE, MIN_WIDTH);
+        int tileAreaCentreY = HUD_TOP + (controller.getBoard().getRows() * TILE_SIZE) / 2;
         g.setFont(new Font("Arial", Font.BOLD, 22));
         FontMetrics fm = g.getFontMetrics();
         int msgW = fm.stringWidth(msg);
         int msgH = fm.getHeight();
         int mx = (panelW - msgW) / 2;
-        int my = panelH / 2;
+        int my = tileAreaCentreY;
         g.setColor(new Color(0, 0, 0, 180));
         g.fillRoundRect(mx - 10, my - msgH, msgW + 20, msgH + 12, 12, 12);
         g.setColor(color);
@@ -173,6 +219,8 @@ public class GamePanel extends JPanel {
     @Override
     public Dimension getPreferredSize() {
         Board board = controller.getBoard();
-        return new Dimension(board.getCols() * TILE_SIZE, board.getRows() * TILE_SIZE);
+        int w = Math.max(board.getCols() * TILE_SIZE, MIN_WIDTH);
+        int h = board.getRows() * TILE_SIZE + HUD_TOP + HUD_BOTTOM;
+        return new Dimension(w, h);
     }
 }

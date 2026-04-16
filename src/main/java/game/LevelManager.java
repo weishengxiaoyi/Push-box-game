@@ -98,6 +98,10 @@ public class LevelManager {
             new Level("Level 5 - Five Boxes",   LEVEL5, Theme.YELLOW),
         };
         currentIndex = 0;
+        // Validate all levels: box count must equal goal count (1:1 rule).
+        for (Level level : levels) {
+            ComplexityCalculator.validateBoxGoalParity(level.name, level.mapData);
+        }
     }
 
     public Level getCurrentLevel() {

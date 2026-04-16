@@ -13,15 +13,16 @@ Push-box-game/
 │   └── main/
 │       ├── java/
 │       │   └── game/         # All Java source files
-│       │       ├── Main.java          # Entry point
+│       │       ├── Main.java                 # Entry point
 │       │       ├── GameWindow.java
 │       │       ├── GamePanel.java
 │       │       ├── GameController.java
 │       │       ├── Board.java
 │       │       ├── Level.java
 │       │       ├── LevelManager.java
+│       │       ├── ComplexityCalculator.java # Difficulty scoring & validation
 │       │       ├── Theme.java
-│       │       └── AssetManager.java  # Loads images from classpath
+│       │       └── AssetManager.java         # Loads images from classpath
 │       └── resources/
 │           └── assets/       # All image assets (PNG sprites)
 └── docs/                     # Screenshots and assignment documents
@@ -96,13 +97,32 @@ java -jar build/libs/sokoban-1.0.jar
 
 ## Levels
 
-| Level | Name          | Theme  | Boxes | Goals | Min. Steps | Notes                        |
-|-------|---------------|--------|-------|-------|------------|------------------------------|
-| 1     | Tutorial      | Beige  | 1     | 1     | ~8         | L-shaped introductory room   |
-| 2     | Two Boxes     | Brown  | 2     | 2     | ~16        | Enclosed 7×7 room            |
-| 3     | Three Boxes   | Gray   | 3     | 3     | ~18        | Enclosed 8×8 diagonal layout |
-| 4     | Four Boxes    | Black  | 4     | 4     | ~25        | Enclosed 9×10 two-tier room  |
-| 5     | Five Boxes    | Yellow | 5     | 5     | ~39        | Enclosed 9×11 full challenge |
+Difficulty is measured by a **complexity score** computed from structural features of
+each map (box count, map area, wall density, and average box-to-goal distance).
+This replaces the earlier "minimum steps" metric, which did not correlate reliably
+with actual solving difficulty.
+
+| Level | Name        | Theme  | Boxes | Goals | Complexity Score | Difficulty | Notes                        |
+|-------|-------------|--------|-------|-------|-----------------|------------|------------------------------|
+| 1     | Tutorial    | Beige  | 1     | 1     | ~30             | Easy       | L-shaped introductory room   |
+| 2     | Two Boxes   | Brown  | 2     | 2     | ~40             | Medium     | Enclosed 7×7 room            |
+| 3     | Three Boxes | Gray   | 3     | 3     | ~54             | Medium     | Enclosed 8×8 diagonal layout |
+| 4     | Four Boxes  | Black  | 4     | 4     | ~68             | Hard       | Enclosed 9×10 two-tier room  |
+| 5     | Five Boxes  | Yellow | 5     | 5     | ~80             | Expert     | Enclosed 9×11 full challenge |
+
+The complexity score and difficulty label are displayed live in the HUD at the top of
+the game window.
+
+### Complexity score formula
+
+```
+score = (boxCount × 10)         – primary driver
+      + (mapArea  /  5)         – larger playfield needs more navigation
+      + (wallDensity × 20)      – denser walls = tighter corridors
+      + (avgMinManhattan × 2)   – farther boxes from goals = harder to place
+```
+
+Thresholds: ≤ 35 → **Easy** | ≤ 55 → **Medium** | ≤ 75 → **Hard** | > 75 → **Expert**
 
 ### Level solutions (spoilers)
 
