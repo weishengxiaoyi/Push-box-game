@@ -102,13 +102,13 @@ each map (box count, map area, wall density, and average box-to-goal distance).
 This replaces the earlier "minimum steps" metric, which did not correlate reliably
 with actual solving difficulty.
 
-| Level | Name        | Theme  | Boxes | Goals | Complexity Score | Difficulty | Notes                        |
-|-------|-------------|--------|-------|-------|-----------------|------------|------------------------------|
-| 1     | Tutorial    | Beige  | 1     | 1     | ~30             | Easy       | L-shaped introductory room   |
-| 2     | Two Boxes   | Brown  | 2     | 2     | ~40             | Medium     | Enclosed 7×7 room            |
-| 3     | Three Boxes | Gray   | 3     | 3     | ~54             | Medium     | Enclosed 8×8 diagonal layout |
-| 4     | Four Boxes  | Black  | 4     | 4     | ~68             | Hard       | Enclosed 9×10 two-tier room  |
-| 5     | Five Boxes  | Yellow | 5     | 5     | ~80             | Expert     | Enclosed 9×11 full challenge |
+| Level | Name         | Theme  | Boxes | Goals | Complexity Score | Difficulty | Notes                                    |
+|-------|--------------|--------|-------|-------|-----------------|------------|------------------------------------------|
+| 1     | Introduction | Beige  | 1     | 1     | ~30             | Easy       | Single collinear push                    |
+| 2     | Deadlock     | Brown  | 1     | 1     | ~36             | Medium     | Interior walls force careful positioning |
+| 3     | Two Paths    | Gray   | 2     | 2     | ~54             | Medium     | Two-room layout; push order matters      |
+| 4     | Goal Room    | Black  | 3     | 3     | ~70             | Hard       | Clustered goal area with narrow entrance |
+| 5     | Multi-Room   | Yellow | 4     | 4     | ~79             | Expert     | Multi-room corridors; deadlock risk high |
 
 The complexity score and difficulty label are displayed live in the HUD at the top of
 the game window.
@@ -124,12 +124,19 @@ score = (boxCount × 10)         – primary driver
 
 Thresholds: ≤ 35 → **Easy** | ≤ 55 → **Medium** | ≤ 75 → **Hard** | > 75 → **Expert**
 
-### Level solutions (spoilers)
+### Level design notes
 
-**Level 2** — navigate above box(2,2) and push it *down* to goal(3,2); then navigate below box(4,4) and push it *up* to goal(3,4). The three down-moves in the solution (DDD) are player navigation only.  
-**Level 3** — push each diagonal box straight down its column to the three adjacent goals in row 5.  
-**Level 4** — push the two lower boxes down one step first, then navigate up and push each upper box down two steps.  
-**Level 5** — push the two bottom boxes down one step first, then push each of the three upper boxes straight down three steps.
+These five levels use progressively harder Sokoban mechanics:
+
+- **Level 1** — teaches the basic "push, not pull" rule; one move wins.
+- **Level 2** — interior walls introduce the concept of push-angle positioning;
+  moving a box into a corner deadlocks it permanently.
+- **Level 3** — two boxes in a two-room layout; boxes can block each other's
+  corridors, so push order is the key challenge.
+- **Level 4** — three boxes must fill a clustered goal room; filling the deepest
+  slot first is critical to avoid blocking the entrance.
+- **Level 5** — four boxes across multiple connected rooms with narrow doorways;
+  incorrect pushes create unrecoverable deadlocks.
 
 ## Objective
 
