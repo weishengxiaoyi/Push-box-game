@@ -117,4 +117,21 @@ public class ComplexityCalculator {
             );
         }
     }
+
+    /**
+     * Computes the complexity score for an {@code int[][]} grid map using
+     * {@link Board} tile constants.
+     */
+    public static int compute(int[][] gridData) {
+        return compute(Level.intGridToStringArray(gridData));
+    }
+
+    /**
+     * Validates box/goal parity for an {@code int[][]} grid map.
+     *
+     * @throws IllegalArgumentException if box count differs from goal count
+     */
+    public static void validateBoxGoalParity(String levelName, int[][] gridData) {
+        validateBoxGoalParity(levelName, Level.intGridToStringArray(gridData));
+    }
 }
