@@ -106,9 +106,9 @@ with actual solving difficulty.
 |-------|--------------|--------|-------|-------|-----------------|------------|------------------------------------------|
 | 1     | Introduction | Beige  | 1     | 1     | ~30             | Easy       | Single collinear push                    |
 | 2     | Deadlock     | Brown  | 1     | 1     | ~36             | Medium     | Interior walls force careful positioning |
-| 3     | Two Paths    | Gray   | 2     | 2     | ~54             | Medium     | Two-room layout; push order matters      |
-| 4     | Goal Room    | Black  | 3     | 3     | ~70             | Hard       | Clustered goal area with narrow entrance |
-| 5     | Multi-Room   | Yellow | 4     | 4     | ~79             | Expert     | Multi-room corridors; deadlock risk high |
+| 3     | Two Paths    | Gray   | 2     | 2     | ~54             | Medium     | Stacked goals on right; 2 push-sequence solutions |
+| 4     | Goal Room    | Black  | 3     | 3     | ~70             | Hard       | Clustered goal room; unique push-order solution   |
+| 5     | Multi-Room   | Yellow | 4     | 4     | ~79             | Expert     | Multi-room bottleneck; unique push-order solution |
 
 The complexity score and difficulty label are displayed live in the HUD at the top of
 the game window.
@@ -131,12 +131,13 @@ These five levels use progressively harder Sokoban mechanics:
 - **Level 1** — teaches the basic "push, not pull" rule; one move wins.
 - **Level 2** — interior walls introduce the concept of push-angle positioning;
   moving a box into a corner deadlocks it permanently.
-- **Level 3** — two boxes in a two-room layout; boxes can block each other's
-  corridors, so push order is the key challenge.
-- **Level 4** — three boxes must fill a clustered goal room; filling the deepest
-  slot first is critical to avoid blocking the entrance.
-- **Level 5** — four boxes across multiple connected rooms with narrow doorways;
-  incorrect pushes create unrecoverable deadlocks.
+- **Level 3** — two boxes with stacked goals on the right; either box can be
+  pushed first, giving exactly two push-sequence solutions.
+- **Level 4** — three boxes must fill a clustered goal room via a narrow entrance;
+  the deepest slot must be filled first — unique push-sequence solution.
+- **Level 5** — four boxes scattered across left rooms must pass through a narrow
+  bottleneck corridor to reach a clustered right goal area; unique push-sequence
+  solution with high deadlock risk if order is wrong.
 
 ## Objective
 

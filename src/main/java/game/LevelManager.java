@@ -27,54 +27,51 @@ public class LevelManager {
         "########"
     };
 
-    // Level 3 – 2 boxes / 2 goals, 9×9 two-room layout (Medium, ~54)
-    // Two separate rooms connected by a central corridor; ordering matters
-    // because the boxes block each other's paths if pushed in the wrong order.
+    // Level 3 – 2 boxes / 2 goals, 9×9 layout (Medium)
+    // Player starts top-left; two goals are stacked on the right side.
+    // The two boxes can be pushed to the goals in either order (2 push-sequence solutions).
     private static final String[] LEVEL3 = {
         "#########",
-        "#   #   #",
-        "# $ # . #",
-        "#       #",
-        "### # ###",
-        "#   #   #",
-        "# . # $@#",
-        "#       #",
+        "#@  #   #",
+        "### # # #",
+        "#     #.#",
+        "# ### #.#",
+        "# #$#   #",
+        "# # ### #",
+        "#  $    #",
         "#########"
     };
 
-    // Level 4 – 3 boxes / 3 goals, 10×10 two-section room (Hard, ~70)
-    // Three goals are clustered in the upper-right section ("goal room");
-    // boxes must be pushed in the correct fill order or the entrance is blocked.
+    // Level 4 – 3 boxes / 3 goals, 9×10 layout (Hard)
+    // Goals are clustered in the upper-right "goal room" with a narrow entrance.
+    // Boxes must be pushed in the correct fill order or the entrance is blocked (unique solution).
     private static final String[] LEVEL4 = {
         "##########",
-        "#   #    #",
-        "# $ # ...#",
-        "#   #    #",
-        "### ### ##",
-        "#        #",
-        "# $ #    #",
-        "#   # $ @#",
-        "#        #",
+        "#@  #    #",
+        "### # ## #",
+        "#     #..#",
+        "# ### #. #",
+        "# #$# ## #",
+        "# # #  $ #",
+        "#      $ #",
         "##########"
     };
 
-    // Level 5 – 4 boxes / 4 goals, 11×12 multi-room layout (Expert, ~79)
-    // Boxes and goals are split across multiple rooms connected by narrow
-    // corridors; optimal push order requires careful planning to avoid
-    // permanent deadlocks.
-    // Note: box at (3,9) was added to satisfy the 1:1 box/goal parity
-    // requirement (original design had 3 boxes but 4 goals).
+    // Level 5 – 4 boxes / 4 goals, 11×12 multi-room layout (Expert)
+    // Four goals are clustered in the right section; boxes are scattered across
+    // the left rooms and must be routed through a narrow bottleneck corridor.
+    // Incorrect push order causes unrecoverable deadlocks (unique solution).
     private static final String[] LEVEL5 = {
         "############",
-        "#   #      #",
-        "# $ # . #. #",
-        "#   #   # $#",
-        "### ### # ##",
-        "#          #",
-        "# $ # ### $#",
-        "#   #      #",
-        "# . #  @  .#",
-        "#   #      #",
+        "#@   #     #",
+        "#### # ### #",
+        "#      #.. #",
+        "# #### #.. #",
+        "# #$       #",
+        "# # ##### ##",
+        "#  $    #  #",
+        "#    # $#  #",
+        "#    #   $ #",
         "############"
     };
 
