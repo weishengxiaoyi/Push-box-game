@@ -27,39 +27,39 @@ public class LevelManager {
         "########"
     };
 
-    // Level 3
     private static final String[] LEVEL3 = {
-        "  #######",
-        "  #     #",
-        "###@*** #",
-        "#  *$.$ #",
-        "#   $.$ #",
-        "#   ..  #",
-        "#########"
+            "########",
+            "####   #",
+            "##@*** #",
+            "##*$.$ #",
+            "#  $ $ #",
+            "#  ... #",
+            "###    #",
+            "########"
     };
-
     // Level 4
     private static final String[] LEVEL4 = {
-        " ########",
-        " #@  *$ #",
-        " # *   .#",
-        "###$##* #",
-        "# $.#   #",
-        "# . #*  #",
-        "#####   #",
-        "    #####"
+            "########",
+            "#@##$$ #",
+            "# *   .##",
+            "##$##.* #",
+            "#    *  #",
+            "#  $.#  #",
+            "##.   *##",
+            " ###   #",
+            "   #####"
     };
-
     // Level 5
     private static final String[] LEVEL5 = {
-        "##############",
-        "#           @#",
-        "# ########## #",
-        "# #        # #",
-        "# $$###### # #",
-        "###      # . #",
-        "  ###### # . #",
-        "         #####"
+            "############",
+            "#          #",
+            "# ####### @##",
+            "# #         #",
+            "# #      #  #",
+            "# $$ #####  #",
+            "###  # #  ..#",
+            "  #### #    #",
+            "       ######"
     };
 
     private final Level[] levels;
@@ -69,9 +69,9 @@ public class LevelManager {
         levels = new Level[]{
             new Level("Level 1 - Introduction",  LEVEL1, Theme.BEIGE),
             new Level("Level 2 - Deadlock",      LEVEL2, Theme.BROWN),
-            new Level("Level 3 - Two Paths",     LEVEL3, Theme.GRAY),
-            new Level("Level 4 - Goal Room",     LEVEL4, Theme.BLACK),
-            new Level("Level 5 - Multi-Room",    LEVEL5, Theme.YELLOW),
+            new Level("Level 3 - The Warehouse",     LEVEL3, Theme.GRAY),
+            new Level("Level 4 - Scattered Gems",     LEVEL4, Theme.BLACK),
+            new Level("Level 5 - The Long Corridor",    LEVEL5, Theme.YELLOW),
         };
         currentIndex = 0;
         // Validate all levels: box count must equal goal count (1:1 rule).
