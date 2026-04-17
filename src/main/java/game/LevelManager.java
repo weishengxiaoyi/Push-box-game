@@ -30,49 +30,49 @@ public class LevelManager {
     // Level 3 – 2 boxes / 2 goals, 9×9 layout (Medium)
     // Player starts top-left; two goals are stacked on the right side.
     // The two boxes can be pushed to the goals in either order (2 push-sequence solutions).
-    private static final String[] LEVEL3 = {
-        "#########",
-        "#@  #   #",
-        "### # # #",
-        "#     #.#",
-        "# ### #.#",
-        "# #$#   #",
-        "# # ### #",
-        "#  $    #",
-        "#########"
+    private static final int[][] LEVEL3 = {
+        {2,2,2,2,2,2,2,2,2},
+        {2,6,1,1,2,1,1,1,2},
+        {2,2,2,1,2,1,2,1,2},
+        {2,1,1,1,1,1,2,3,2},
+        {2,1,2,2,2,1,2,3,2},
+        {2,1,2,4,2,1,1,1,2},
+        {2,1,2,1,2,2,2,1,2},
+        {2,1,1,4,1,1,1,1,2},
+        {2,2,2,2,2,2,2,2,2}
     };
 
     // Level 4 – 3 boxes / 3 goals, 9×10 layout (Hard)
     // Goals are clustered in the upper-right "goal room" with a narrow entrance.
     // Boxes must be pushed in the correct fill order or the entrance is blocked (unique solution).
-    private static final String[] LEVEL4 = {
-        "##########",
-        "#@  #    #",
-        "### # ## #",
-        "#     #..#",
-        "# ### #. #",
-        "# #$# ## #",
-        "# # #  $ #",
-        "#      $ #",
-        "##########"
+    private static final int[][] LEVEL4 = {
+        {2,2,2,2,2,2,2,2,2,2},
+        {2,6,1,1,2,1,1,1,1,2},
+        {2,2,2,1,2,1,2,2,1,2},
+        {2,1,1,1,1,1,2,3,3,2},
+        {2,1,2,2,2,1,2,3,1,2},
+        {2,1,2,4,2,1,2,2,1,2},
+        {2,1,2,1,2,1,1,4,1,2},
+        {2,1,1,1,1,1,4,1,1,2},
+        {2,2,2,2,2,2,2,2,2,2}
     };
 
     // Level 5 – 4 boxes / 4 goals, 11×12 multi-room layout (Expert)
     // Four goals are clustered in the right section; boxes are scattered across
     // the left rooms and must be routed through a narrow bottleneck corridor.
     // Incorrect push order causes unrecoverable deadlocks (unique solution).
-    private static final String[] LEVEL5 = {
-        "############",
-        "#@   #     #",
-        "#### # ### #",
-        "#      #.. #",
-        "# #### #.. #",
-        "# #$       #",
-        "# # ##### ##",
-        "#  $    #  #",
-        "#    # $#  #",
-        "#    #   $ #",
-        "############"
+    private static final int[][] LEVEL5 = {
+        {2,2,2,2,2,2,2,2,2,2,2,2},
+        {2,6,1,1,1,2,1,1,1,1,1,2},
+        {2,2,2,2,1,2,1,2,2,2,1,2},
+        {2,1,1,1,1,1,1,2,3,3,1,2},
+        {2,1,2,2,2,2,1,2,3,3,1,2},
+        {2,1,2,4,1,1,1,1,1,1,1,2},
+        {2,1,2,1,2,2,2,2,2,1,2,2},
+        {2,1,1,4,1,1,1,1,2,1,1,2},
+        {2,1,1,1,1,2,1,4,2,1,1,2},
+        {2,1,1,1,1,2,1,1,1,4,1,2},
+        {2,2,2,2,2,2,2,2,2,2,2,2}
     };
 
     private final Level[] levels;
