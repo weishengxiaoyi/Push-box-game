@@ -118,6 +118,23 @@ class GameControllerTest {
         assertEquals(Board.CRATE, b.getCell(1, 3), "Crate should remain at (1,3)");
     }
 
+    @Test
+    void testPushBoxIntoWall() {
+        // Navigate above the crate: (2,2) → (1,2) → (1,3)
+        controller.move(-1, 0); // (2,2) → (1,2)
+        controller.move(0, 1);  // (1,2) → (1,3)
+        // Push crate down: player at (1,3) moves down → crate (2,3) → (3,3), player → (2,3)
+        controller.move(1, 0);
+        // Try push crate down again: crate (3,3) → (4,3) which is '#' → blocked
+        controller.move(1, 0);
+
+        Board b = controller.getBoard();
+        assertEquals(2, b.getPlayerRow(), "Player should be blocked when crate hits wall");
+        assertEquals(3, b.getPlayerCol(), "Player should be blocked when crate hits wall");
+        assertEquals(Board.CRATE, b.getCell(3, 3), "Crate should remain at (3,3)");
+        assertEquals(Board.WALL, b.getCell(4, 3), "Bottom cell should still be a wall");
+    }
+
     // ------------------------------------------------------------------
     // Restart
     // ------------------------------------------------------------------
