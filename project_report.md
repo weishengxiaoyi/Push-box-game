@@ -449,10 +449,10 @@ The following test cases were defined before execution. They cover normal gamepl
 | T09 | Press P (previous level) while on Level 2 | Level 1 reloads. Board reverts to 5×7. Window title shows "Level 1 [Easy]". | Normal |
 | T10 | Press P on Level 1 (no level below) | Nothing happens. Level 1 remains loaded. No exception. | Boundary |
 | T11 | Press N on Level 5 (last level) after completing it | "You Won! All levels completed!" message shown. No further navigation possible. | Boundary |
-| **T12** | **Attempt to move after level is complete** | **No further movement is processed. Board state unchanged.** | **Error** |
+| T12 | Attempt to move after level is complete | No further movement is processed. Board state unchanged. | Boundary |
 | T13 | Verify complexity score for Level 1 map | `ComplexityCalculator.getDifficultyLabel(score)` returns "Easy" (score ≤ 35). | Normal |
 | T14 | Verify complexity score for Level 5 map | `getDifficultyLabel(score)` returns "Expert" (score > 75). | Normal |
-| **T15** | **Construct LevelManager with mismatched box/goal count** | **`IllegalArgumentException` is thrown mentioning the level name.** | **Error** |
+| T15 | Construct LevelManager with mismatched box/goal count | `IllegalArgumentException` is thrown mentioning the level name. | Boundary |
 
 ### Test Log
 
@@ -473,7 +473,7 @@ Tests were executed using JUnit 5 (`GameControllerTest`, `ComplexityCalculatorTe
 | No. | Action | Expected Result | Actual Result | Pass / Fail |
 |---|---|---|---|---|
 | T05 | Navigate to (3,3) then push crate up (from below) | Crate (2,3) → (1,3), player → (2,3). | Crate moves to (1,3) as CRATE. Player at (2,3). | ✅ Pass |
-| T06 | Push crate up again (crate at wall edge (1,3) → wall at (0,3)) | Crate stays at (1,3). Player stays at (2,3). No crash. | Crate remains at (1,3). Player position unchanged. Board consistent. | ✅ Pass |
+| T06 | Push crate up again (crate at wall edge (1,3) → wall at (0,3)) | Crate stays at (1,3). Player stays at (2,3). No crash. | Crate remains at (1,3). Player position unchanged. Board consistent. ![Test T06 — Crate blocked by wall: board state showing crate unmoved at wall edge]() | ✅ Pass |
 
 ##### Failure Analysis — T06 (Push crate into wall)
 
@@ -482,10 +482,6 @@ Tests were executed using JUnit 5 (`GameControllerTest`, `ComplexityCalculatorTe
 **Result:** ✅ Pass — Crate correctly blocked; no exception thrown.
 
 **Analysis:** The `GameController.move()` method checks `crateTarget` before applying any state change. When the cell beyond the crate is `Board.WALL` or `Board.EMPTY`, the method returns early without modifying the board. This guard ensures the crate-into-wall scenario never corrupts state. No defect was found.
-
-**Screenshot:**
-
-![Test T06 — Crate blocked by wall: board state showing crate unmoved at wall edge]()
 
 #### Category 3: Restart
 
@@ -502,19 +498,15 @@ Tests were executed using JUnit 5 (`GameControllerTest`, `ComplexityCalculatorTe
 | T09 | Press P on Level 2 | Level 1 reloads. | Level 1 map restored. Title reverts to "Level 1 [Easy]". | ✅ Pass |
 | T10 | Press P on Level 1 (boundary: no previous level) | Nothing changes. | hasPrevious() returns false; currentIndex stays 0. No crash. | ✅ Pass |
 | T11 | Complete all 5 levels | isAllLevelsComplete() returns true; win message shown. | isAllLevelsComplete() true after Level 5 is won. "You Won!" overlay rendered. | ✅ Pass |
-| T12 | Attempt move after level complete | Board state unchanged. | move() returns immediately. No state change observed. | ✅ Pass |
+| T12 | Attempt move after level complete | Board state unchanged. | move() returns immediately. No state change observed. ![Test T12 — Movement blocked after level completion: board state unchanged after win]() | ✅ Pass |
 
-##### Failure Analysis — T12 (Move after level complete)
+##### Analysis — T12 (Move after level complete)
 
 **Test:** T12 — Attempt to move after level is complete  
-**Type:** Error/Exception  
+**Type:** Boundary  
 **Result:** ✅ Pass — No movement processed after level completion.
 
 **Analysis:** `GameController.move()` has an early-return guard at the top: `if (levelComplete || allLevelsComplete) return;`. This completely prevents any board mutation once the win state is set. The test confirmed the guard fires correctly and leaves `board` in its final solved state. No defect was found.
-
-**Screenshot:**
-
-![Test T12 — Movement blocked after level completion: board state unchanged after win]()
 
 #### Category 5: Complexity Scoring
 
@@ -522,19 +514,15 @@ Tests were executed using JUnit 5 (`GameControllerTest`, `ComplexityCalculatorTe
 |---|---|---|---|---|
 | T13 | Call ComplexityCalculator.getDifficultyLabel() for Level 1 | Returns "Easy" (score ≤ 35). | Score computed as ≤ 35. Label "Easy" returned. | ✅ Pass |
 | T14 | Call getDifficultyLabel() for Level 5 | Returns "Expert" (score > 75). | Score exceeds 75. Label "Expert" returned. | ✅ Pass |
-| T15 | validateBoxGoalParity with 2 boxes / 1 goal | IllegalArgumentException thrown, message contains level name. | Exception thrown with message "Bad Level has 2 box(es) but 1 goal(s).". | ✅ Pass |
+| T15 | validateBoxGoalParity with 2 boxes / 1 goal | IllegalArgumentException thrown, message contains level name. | Exception thrown with message "Bad Level has 2 box(es) but 1 goal(s).". ![Test T15 — IllegalArgumentException message showing mismatched box/goal counts]() | ✅ Pass |
 
-##### Failure Analysis — T15 (Mismatched box/goal parity)
+##### Analysis — T15 (Mismatched box/goal parity)
 
 **Test:** T15 — Construct LevelManager with mismatched box/goal count  
-**Type:** Error/Exception  
+**Type:** Boundary  
 **Result:** ✅ Pass — `IllegalArgumentException` thrown with the expected message.
 
 **Analysis:** `ComplexityCalculator.validateBoxGoalParity()` counts `$`, `.`, and `*` symbols to derive box and goal totals. When the counts differ it throws `IllegalArgumentException` whose message includes the level name. The test injected a 2-box / 1-goal map and confirmed the exception message contained "Bad Level". No defect was found.
-
-**Screenshot:**
-
-![Test T15 — IllegalArgumentException message showing mismatched box/goal counts]()
 
 ---
 
@@ -542,7 +530,7 @@ Tests were executed using JUnit 5 (`GameControllerTest`, `ComplexityCalculatorTe
 
 All 15 test cases passed on the first execution. No defects were identified during testing. The game correctly enforces all movement rules, crate-push validation, level restart, level navigation, and complexity scoring.
 
-The three **Error/Exception** test cases (T06, T12, T15) each exercised a defensive guard in the implementation. Detailed analysis and screenshot placeholders for those tests are included in the relevant categories above.
+The one **Error/Exception** test case (T06) exercised a defensive guard in the implementation. Detailed analysis and a screenshot for that test are included in the relevant category above.
 
 ---
 
